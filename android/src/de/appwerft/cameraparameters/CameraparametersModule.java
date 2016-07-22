@@ -100,7 +100,6 @@ public class CameraparametersModule extends KrollModule {
 							} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
 								dict.put("orientation", "rear");
 							}
-
 							dict.put("pixelResolution", size.width + "×"
 									+ size.height);
 							dict.put("flashAvailable",
