@@ -102,6 +102,9 @@ public class CameraparametersModule extends KrollModule {
 							}
 							dict.put("pixelResolution", size.width + "×"
 									+ size.height);
+							dict.put(
+									"megapixel",
+									((double) size.width * (double) size.height) / 1000000.0f);
 							dict.put("flashAvailable",
 									(flashMode != null) ? true : false);
 							listOfCameras.add(dict);
