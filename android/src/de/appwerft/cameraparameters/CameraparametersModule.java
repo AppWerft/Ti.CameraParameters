@@ -44,6 +44,11 @@ public class CameraparametersModule extends KrollModule {
 	}
 
 	@Kroll.method
+	public void getAllCams(KrollDict opts) {
+		this.getAllCameras(opts);
+	}
+
+	@Kroll.method
 	public void getAllCameras(KrollDict opts) {
 		// import callbacks:
 		startTime = System.currentTimeMillis();
@@ -87,6 +92,15 @@ public class CameraparametersModule extends KrollModule {
 							String flashMode = parameters.getFlashMode();
 							android.hardware.Camera.Size size = parameters
 									.getPictureSize();
+							/* FRONT or REAR? */
+							Camera.CameraInfo cInfo = new Camera.CameraInfo();
+							Camera.getCameraInfo(i, cInfo);
+							if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+								dict.put("orientation", "front");
+							} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+								dict.put("orientation", "rear");
+							}
+
 							dict.put("pixelResolution", size.width + "×"
 									+ size.height);
 							dict.put("flashAvailable",
@@ -158,5 +172,4 @@ public class CameraparametersModule extends KrollModule {
 			Log.e(LCAT,
 					"Parameter is an object with 2 callbacks (onSuccess and onError)");
 	}
-
 }
