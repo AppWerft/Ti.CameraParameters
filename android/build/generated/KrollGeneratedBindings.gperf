@@ -1,0 +1,16 @@
+%define lookup-function-name lookupGeneratedInit
+%define class-name CameraparametersBindings
+%{
+
+#include <string.h>
+#include <v8.h>
+#include <KrollBindings.h>
+
+#include "de.appwerft.cameraparameters.CameraparametersModule.h"
+
+
+%}
+struct titanium::bindings::BindEntry;
+%%
+de.appwerft.cameraparameters.CameraparametersModule, ::de::appwerft::cameraparameters::CameraparametersModule::bindProxy, ::de::appwerft::cameraparameters::CameraparametersModule::dispose
+%%
