@@ -1,34 +1,37 @@
 Ti.Cameraparamters
 ==================
 
-This is a Titanium module for exposing some camera infos.
+This is a Titanium module for exposing some camera properties like resolution.
+
+Thanks to [Roamler](https://www.roamler.com/)  in Amsterdam for sponsoring and [Rene](http://renepot.net) for patience and support. 
+
+<img src="https://secure.gravatar.com/avatar/325662ace9877e9af4291aff59ec9318.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2F7fa9%2Fimg%2Favatars%2Fava_0026-512.png" width=40/> <img src="https://www.roamler.com/images/logo-roamler-shield.png" height=40/>
 
 
 Attention!
 
-For older android versions including Kitkat it uses `android.hardware.Camera` and since Lollipop it uses the new API `android.hardware.camera2`. 
-Upto Marshmellow the module needs CAMERA runtime permisions!
+For older android versions including Kitkat it uses `android.hardware.Camera` and since API 21 (Lollipop) it uses the new API `android.hardware.camera2`. 
+Up to Marshmellow the module needs CAMERA runtime permisions!
 
-Because the access to hardware takes a couple of time the module works as async task outside UIthread. Therefore the module works with a callback for result.
-
+Because the access to hardware takes some time, the module works as an asynchronous task outside UIthread. Therefore the module works with a callback for result.
 
 ##Usage
 
-Just include 
+Just include the module in `tiapp.xml`
 
 ```xml
 <module platform="android">de.appwerft.cameraparameters</module>
 ```
 
-Don't forget to test, if this line is in your manifest:
+Don't forget to add the permission needed in `tiapp.xml` or in your manifest:
 ```xml
 <uses-permission android:name="android.permission.CAMERA"/>
 ```
 
-In you tiapp.xml. After this you can access the module by:
+Once included, you can use the module in your app. Example:
 
 ```javascript
-require("de.appwerft.cameraparameters").getAllCams({
+require("de.appwerft.cameraparameters").getAllCameras({
         onSuccess : function(_e) {
         console.log(_e);
     },
@@ -67,3 +70,5 @@ Here an example output:
     "api":"android.hardware.camera2"
 }
 ```
+
+Note: `chipSize`, `orientation` and `flashAvailable` are only available on the `Camera2` API. Therefore it is only available in API 21 (Lollipop) and later.
