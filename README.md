@@ -71,4 +71,4 @@ Here an example output:
 }
 ```
 
-Note: `chipSize`, `orientation` and `flashAvailable` are only available on the `Camera2` API. Therefore it is only available in API 21 (Lollipop) and later.
+Note: `chipSize` is only available on the `Camera2` API. Therefore it is only available in API 21 (Lollipop) and later.
