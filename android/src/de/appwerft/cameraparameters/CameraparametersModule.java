@@ -44,7 +44,7 @@ public class CameraparametersModule extends KrollModule {
 	}
 
 	@Kroll.method
-	public void getAllCams(KrollDict opts) {
+	public void getAllCameras(KrollDict opts) {
 		// import callbacks:
 		startTime = System.currentTimeMillis();
 		if (opts != null && opts instanceof KrollDict) {

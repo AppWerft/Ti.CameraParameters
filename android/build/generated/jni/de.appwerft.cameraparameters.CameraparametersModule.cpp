@@ -89,9 +89,7 @@ Handle<FunctionTemplate> CameraparametersModule::getProxyTemplate()
 	titanium::ProxyFactory::registerProxyPair(javaClass, *proxyTemplate);
 
 	// Method bindings --------------------------------------------------------
-	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "isInForeground", CameraparametersModule::isInForeground);
-	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "getAllCams", CameraparametersModule::getAllCams);
-	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "getParametersByCamera", CameraparametersModule::getParametersByCamera);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "getAllCameras", CameraparametersModule::getAllCameras);
 
 	Local<ObjectTemplate> prototypeTemplate = proxyTemplate->PrototypeTemplate();
 	Local<ObjectTemplate> instanceTemplate = proxyTemplate->InstanceTemplate();
@@ -110,9 +108,9 @@ Handle<FunctionTemplate> CameraparametersModule::getProxyTemplate()
 }
 
 // Methods --------------------------------------------------------------------
-Handle<Value> CameraparametersModule::isInForeground(const Arguments& args)
+Handle<Value> CameraparametersModule::getAllCameras(const Arguments& args)
 {
-	LOGD(TAG, "isInForeground()");
+	LOGD(TAG, "getAllCameras()");
 	HandleScope scope;
 
 	JNIEnv *env = titanium::JNIScope::getEnv();
@@ -121,57 +119,9 @@ Handle<Value> CameraparametersModule::isInForeground(const Arguments& args)
 	}
 	static jmethodID methodID = NULL;
 	if (!methodID) {
-		methodID = env->GetMethodID(CameraparametersModule::javaClass, "isInForeground", "()Z");
+		methodID = env->GetMethodID(CameraparametersModule::javaClass, "getAllCameras", "(Lorg/appcelerator/kroll/KrollDict;)V");
 		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'isInForeground' with signature '()Z'";
-			LOGE(TAG, error);
-				return titanium::JSException::Error(error);
-		}
-	}
-
-	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
-
-	jvalue* jArguments = 0;
-
-	jobject javaProxy = proxy->getJavaObject();
-	jboolean jResult = (jboolean)env->CallBooleanMethodA(javaProxy, methodID, jArguments);
-
-
-
-	if (!JavaObject::useGlobalRefs) {
-		env->DeleteLocalRef(javaProxy);
-	}
-
-
-
-	if (env->ExceptionCheck()) {
-		Handle<Value> jsException = titanium::JSException::fromJavaException();
-		env->ExceptionClear();
-		return jsException;
-	}
-
-
-	Handle<Boolean> v8Result = titanium::TypeConverter::javaBooleanToJsBoolean(env, jResult);
-
-
-
-	return v8Result;
-
-}
-Handle<Value> CameraparametersModule::getAllCams(const Arguments& args)
-{
-	LOGD(TAG, "getAllCams()");
-	HandleScope scope;
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		return titanium::JSException::GetJNIEnvironmentError();
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(CameraparametersModule::javaClass, "getAllCams", "(Lorg/appcelerator/kroll/KrollDict;)V");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getAllCams' with signature '(Lorg/appcelerator/kroll/KrollDict;)V'";
+			const char *error = "Couldn't find proxy method 'getAllCameras' with signature '(Lorg/appcelerator/kroll/KrollDict;)V'";
 			LOGE(TAG, error);
 				return titanium::JSException::Error(error);
 		}
@@ -181,7 +131,7 @@ Handle<Value> CameraparametersModule::getAllCams(const Arguments& args)
 
 	if (args.Length() < 1) {
 		char errorStringBuffer[100];
-		sprintf(errorStringBuffer, "getAllCams: Invalid number of arguments. Expected 1 but got %d", args.Length());
+		sprintf(errorStringBuffer, "getAllCameras: Invalid number of arguments. Expected 1 but got %d", args.Length());
 		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
 	}
 
@@ -223,58 +173,6 @@ Handle<Value> CameraparametersModule::getAllCams(const Arguments& args)
 
 
 	return v8::Undefined();
-
-}
-Handle<Value> CameraparametersModule::getParametersByCamera(const Arguments& args)
-{
-	LOGD(TAG, "getParametersByCamera()");
-	HandleScope scope;
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		return titanium::JSException::GetJNIEnvironmentError();
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(CameraparametersModule::javaClass, "getParametersByCamera", "()Lorg/appcelerator/kroll/KrollDict;");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'getParametersByCamera' with signature '()Lorg/appcelerator/kroll/KrollDict;'";
-			LOGE(TAG, error);
-				return titanium::JSException::Error(error);
-		}
-	}
-
-	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
-
-	jvalue* jArguments = 0;
-
-	jobject javaProxy = proxy->getJavaObject();
-	jobject jResult = (jobject)env->CallObjectMethodA(javaProxy, methodID, jArguments);
-
-
-
-	if (!JavaObject::useGlobalRefs) {
-		env->DeleteLocalRef(javaProxy);
-	}
-
-
-
-	if (env->ExceptionCheck()) {
-		Handle<Value> jsException = titanium::JSException::fromJavaException();
-		env->ExceptionClear();
-		return jsException;
-	}
-
-	if (jResult == NULL) {
-		return Null();
-	}
-
-	Handle<Value> v8Result = titanium::TypeConverter::javaObjectToJsValue(env, jResult);
-
-	env->DeleteLocalRef(jResult);
-
-
-	return v8Result;
 
 }
 
