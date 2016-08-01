@@ -71,4 +71,97 @@ Here an example output:
 }
 ```
 
+Other examples:
+```javascript
+ {
+    "model":"SM-T230",
+    "hardware":"pxa1088",
+    "level":19,
+    "count":2,
+    "manufacturer":"samsung",
+    "device":"degaswifi",
+    "runtime":2593,
+    "api":"android.hardware.Camera",
+    "cameras":[{
+        "orientation":"rear",
+        "pixelResolution":"2048×1536",
+        "flashAvailable":false,
+        "megapixel":3.145728
+    },{
+        "orientation":"front",
+        "pixelResolution":"1280×960",
+        "flashAvailable":false,
+        "megapixel":1.2288
+}]}
+
+
+ {
+    "model":"GT-I9195I",
+    "hardware":"qcom",
+    "level":19,
+    "count":2,
+    "manufacturer":"samsung",
+    "device":"serranovelte",
+    "runtime":755,
+    "api":"android.hardware.Camera",
+    "cameras":[{
+        "orientation":"rear",
+        "pixelResolution":"3264×2448",
+        "flashAvailable":true,
+        "megapixel":7.990272
+    },{
+        "orientation":"front",
+        "pixelResolution":"1392×1392",
+        "flashAvailable":true,
+        "megapixel":1.937664
+}]}
+
+ {
+    "device":"hammerhead",
+    "runtime":667,
+    "api":"android.hardware.camera2",
+    "count":2,
+    "manufacturer":"LGE",
+    "hardware":"hammerhead",
+    "level":23,
+    "model":"Nexus 5",
+    "cameras":[{
+        "chipSize":"4.6032×3.5168",
+        "pixelResolution":"3280×2464",
+        "flashAvailable":true,
+        "orientation":"rear",
+        "megapixel":8.08192
+    },{
+        "chipSize":"2.4624×1.8544",
+        "pixelResolution":"1288×968",
+        "flashAvailable":false,
+        "orientation":"front",
+        "megapixel":1.246784
+}]}
+
+
+{
+    "device":"CatS40",
+    "runtime":1103,
+    "api":"android.hardware.camera2",
+    "count":2,
+    "manufacturer":"BullittGroupLimited",
+    "hardware":"qcom",
+    "level":22,
+    "model":"S40",
+    "cameras":[{
+        "chipSize":"4.19528×3.150077",
+        "pixelResolution":"3264×2448",
+        "flashAvailable":true,
+        "orientation":"rear",
+        "megapixel":7.990272
+    },{
+        "chipSize":"2.8328347×2.0981839",
+        "pixelResolution":"1600×1200",
+        "flashAvailable":false,
+        "orientation":"front",
+        "megapixel":1.92
+    }]}
+```
+
 Note: `chipSize` is only available on the `Camera2` API. Therefore it is only available in API 21 (Lollipop) and later.
