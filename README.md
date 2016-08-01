@@ -48,7 +48,7 @@ In result payload you can get:
 2. used API
 3. Array with camera detail infos.
 
-Here an example output:
+Here an example output :
 
 ```javascript
 {
@@ -161,7 +161,31 @@ Other examples:
         "flashAvailable":false,
         "orientation":"front",
         "megapixel":1.92
-    }]}
+}]}
+
+{
+    "device":"flo",
+    "runtime":141,
+    "api":"android.hardware.camera2",
+    "count":2,
+    "manufacturer":"asus",
+    "hardware":"flo",
+    "level":21,
+    "model":"Nexus 7",
+    "cameras":[{
+        "chipSize":"3.673598×2.738401",
+        "pixelResolution":"2592×1944",
+        "flashAvailable":false,
+        "orientation":"rear",
+        "megapixel":5.038848
+    },{
+        "chipSize":"2.459996×1.4800001",
+        "pixelResolution":"1280×768",
+        "flashAvailable":false,
+        "orientation":"front",
+        "megapixel":0.98304
+}]}
+
 ```
 
 Note: `chipSize` is only available on the `Camera2` API. Therefore it is only available in API 21 (Lollipop) and later.
