@@ -2,8 +2,6 @@ package de.appwerft.cameraparameters;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutionException;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollFunction;
@@ -33,6 +31,8 @@ public class CameraparametersModule extends KrollModule {
 	KrollFunction errorCallback = null;
 	long startTime = 0;
 	static Timer mTimer = new Timer();
+	KrollDict resultDict;
+	ArrayList<KrollDict> listOfCameras;
 
 	public CameraparametersModule() {
 		super();
@@ -40,17 +40,92 @@ public class CameraparametersModule extends KrollModule {
 
 	@Kroll.onAppCreate
 	public static void onAppCreate(final TiApplication app) {
-
+		Log.d(LCAT,
+				"inside onAppCreate, if you see this, then the module is successful embedded");
 	}
 
-	@Kroll.method
-	public void getAllCams(KrollDict opts) {
-		this.getAllCameras(opts);
+	private void askOldCamera() {
+		Log.d(LCAT, "we choose node for old cameras (else)");
+		int countOfCams = android.hardware.Camera.getNumberOfCameras();
+		resultDict.put("count", countOfCams);
+		resultDict.put("api", "android.hardware.Camera");
+		resultDict.put("level", Build.VERSION.SDK_INT);
+		for (int i = 0; i < countOfCams; i++) {
+			KrollDict dict = new KrollDict();
+			Camera cam = android.hardware.Camera.open(i);
+			android.hardware.Camera.Parameters parameters = cam.getParameters();
+			String flashMode = parameters.getFlashMode();
+			android.hardware.Camera.Size size = parameters.getPictureSize();
+			/* FRONT or REAR? */
+			Camera.CameraInfo cInfo = new Camera.CameraInfo();
+			Camera.getCameraInfo(i, cInfo);
+			if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+				dict.put("orientation", "front");
+			} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+				dict.put("orientation", "rear");
+			}
+			dict.put("megapixel",
+					((double) size.width * (double) size.height) / 1000000.0f);
+			dict.put("pixelResolution", size.width + "×" + size.height);
+			dict.put("flashAvailable", (flashMode != null) ? true : false);
+			listOfCameras.add(dict);
+			cam.release();
+		}
+	}
+
+	private void askNewCamera() {
+		Log.d(LCAT, "we choose node for moderne cameras");
+		try {
+			Context context = TiApplication.getInstance()
+					.getApplicationContext();
+			CameraManager cameraManager = (CameraManager) context
+					.getSystemService(Context.CAMERA_SERVICE);
+			resultDict.put("count", cameraManager.getCameraIdList().length);
+			resultDict.put("api", "android.hardware.camera2");
+			resultDict.put("level", Build.VERSION.SDK_INT);
+			for (String id : cameraManager.getCameraIdList()) {
+				KrollDict dict = new KrollDict();
+				CameraCharacteristics character = cameraManager
+						.getCameraCharacteristics(id);
+
+				Boolean flashAvailable = character
+						.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+
+				SizeF physicalsize = character
+						.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE);
+
+				Rect activeArray = character
+						.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
+
+				int cOrientation = character
+						.get(CameraCharacteristics.LENS_FACING);
+				dict.put(
+						"orientation",
+						(cOrientation == CameraCharacteristics.LENS_FACING_FRONT) ? "front"
+								: "rear");
+				dict.put("flashAvailable", flashAvailable);
+				dict.put("pixelResolution", activeArray.width() + "×"
+						+ activeArray.height());
+				dict.put("megapixel",
+						((double) activeArray.width() * (double) activeArray
+								.height()) / 1000000.0f);
+				dict.put("chipSize", physicalsize.getWidth() + "×"
+						+ physicalsize.getHeight());
+				listOfCameras.add(dict);
+			}
+		} catch (CameraAccessException e) {
+			Log.e(LCAT, "Failed to interact with camera.", e);
+			resultDict.put("error", "Failed to interact with camera.");
+			if (errorCallback != null)
+				errorCallback.call(getKrollObject(), resultDict);
+		}
+
 	}
 
 	@Kroll.method
 	public void getAllCameras(KrollDict opts) {
-		// import callbacks:
+		resultDict = new KrollDict();
+		listOfCameras = new ArrayList<KrollDict>();
 		startTime = System.currentTimeMillis();
 		if (opts != null && opts instanceof KrollDict) {
 			if (opts.containsKeyAndNotNull("onSuccess")) {
@@ -61,15 +136,12 @@ public class CameraparametersModule extends KrollModule {
 			}
 			Log.d(LCAT, "👿😈 Build.VERSION.SDK_INT=" + Build.VERSION.SDK_INT);
 			AsyncTask<Void, Void, Void> doRequest = new AsyncTask<Void, Void, Void>() {
-				@SuppressWarnings("deprecation")
 				@Override
 				protected Void doInBackground(Void[] dummy) {
-					Activity currentActivity = TiApplication.getInstance()
-							.getCurrentActivity();
-					KrollDict resultDict = new KrollDict();
-					ArrayList<KrollDict> listOfCameras = new ArrayList<KrollDict>();
-					Log.d(LCAT, " Marshmellow+  =>  need lifetime perms");
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+						Log.d(LCAT, " Marshmellow+  =>  need lifetime perms");
+						Activity currentActivity = TiApplication.getInstance()
+								.getRootOrCurrentActivity();
 						if (currentActivity
 								.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
 							resultDict.put("error",
@@ -82,87 +154,9 @@ public class CameraparametersModule extends KrollModule {
 					Log.d(LCAT, "Build.VERSION.SDK_INT="
 							+ Build.VERSION.SDK_INT);
 					if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-						Log.d(LCAT, "we choose node for moderne cameras");
-						try {
-							Context context = TiApplication.getInstance()
-									.getApplicationContext();
-							CameraManager cameraManager = (CameraManager) context
-									.getSystemService(Context.CAMERA_SERVICE);
-							resultDict.put("count",
-									cameraManager.getCameraIdList().length);
-							resultDict.put("api", "android.hardware.camera2");
-							resultDict.put("level", Build.VERSION.SDK_INT);
-							for (String id : cameraManager.getCameraIdList()) {
-								KrollDict dict = new KrollDict();
-								CameraCharacteristics character = cameraManager
-										.getCameraCharacteristics(id);
-
-								Boolean flashAvailable = character
-										.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-
-								SizeF physicalsize = character
-										.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE);
-
-								Rect activeArray = character
-										.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
-
-								int cOrientation = character
-										.get(CameraCharacteristics.LENS_FACING);
-								dict.put(
-										"orientation",
-										(cOrientation == CameraCharacteristics.LENS_FACING_FRONT) ? "front"
-												: "rear");
-								dict.put("flashAvailable", flashAvailable);
-								dict.put("pixelResolution", activeArray.width()
-										+ "×" + activeArray.height());
-								dict.put("megapixel", ((double) activeArray
-										.width() * (double) activeArray
-										.height()) / 1000000.0f);
-								dict.put("chipSize", physicalsize.getWidth()
-										+ "×" + physicalsize.getHeight());
-								listOfCameras.add(dict);
-							}
-						} catch (CameraAccessException e) {
-							Log.e(LCAT, "Failed to interact with camera.", e);
-							resultDict.put("error",
-									"Failed to interact with camera.");
-							if (errorCallback != null)
-								errorCallback
-										.call(getKrollObject(), resultDict);
-						}
+						askNewCamera();
 					} else {
-						Log.d(LCAT, "we choose node for old cameras (else)");
-						int countOfCams = android.hardware.Camera
-								.getNumberOfCameras();
-						resultDict.put("count", countOfCams);
-						resultDict.put("api", "android.hardware.Camera");
-						resultDict.put("level", Build.VERSION.SDK_INT);
-						for (int i = 0; i < countOfCams; i++) {
-							KrollDict dict = new KrollDict();
-							Camera cam = android.hardware.Camera.open(i);
-							android.hardware.Camera.Parameters parameters = cam
-									.getParameters();
-							String flashMode = parameters.getFlashMode();
-							android.hardware.Camera.Size size = parameters
-									.getPictureSize();
-							/* FRONT or REAR? */
-							Camera.CameraInfo cInfo = new Camera.CameraInfo();
-							Camera.getCameraInfo(i, cInfo);
-							if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-								dict.put("orientation", "front");
-							} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-								dict.put("orientation", "rear");
-							}
-							dict.put(
-									"megapixel",
-									((double) size.width * (double) size.height) / 1000000.0f);
-							dict.put("pixelResolution", size.width + "×"
-									+ size.height);
-							dict.put("flashAvailable",
-									(flashMode != null) ? true : false);
-							listOfCameras.add(dict);
-							cam.release();
-						}
+						askOldCamera();
 					}
 					resultDict.put("cameras", listOfCameras.toArray());
 					long currentTime = System.currentTimeMillis();
