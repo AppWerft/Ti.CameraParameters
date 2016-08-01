@@ -59,6 +59,7 @@ public class CameraparametersModule extends KrollModule {
 			if (opts.containsKeyAndNotNull("onError")) {
 				errorCallback = (KrollFunction) opts.get("onError");
 			}
+			Log.d(LCAT, "👿😈 Build.VERSION.SDK_INT=" + Build.VERSION.SDK_INT);
 			AsyncTask<Void, Void, Void> doRequest = new AsyncTask<Void, Void, Void>() {
 				@SuppressWarnings("deprecation")
 				@Override
@@ -67,7 +68,6 @@ public class CameraparametersModule extends KrollModule {
 							.getCurrentActivity();
 					KrollDict resultDict = new KrollDict();
 					ArrayList<KrollDict> listOfCameras = new ArrayList<KrollDict>();
-
 					Log.d(LCAT, " Marshmellow+  =>  need lifetime perms");
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 						if (currentActivity
@@ -81,39 +81,8 @@ public class CameraparametersModule extends KrollModule {
 					}
 					Log.d(LCAT, "Build.VERSION.SDK_INT="
 							+ Build.VERSION.SDK_INT);
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-						int countOfCams = android.hardware.Camera
-								.getNumberOfCameras();
-						resultDict.put("count", countOfCams);
-						resultDict.put("api", "android.hardware.Camera");
-						resultDict.put("level", Build.VERSION.SDK_INT);
-						for (int i = 0; i < countOfCams; i++) {
-							KrollDict dict = new KrollDict();
-							Camera cam = android.hardware.Camera.open(i);
-							android.hardware.Camera.Parameters parameters = cam
-									.getParameters();
-							String flashMode = parameters.getFlashMode();
-							android.hardware.Camera.Size size = parameters
-									.getPictureSize();
-							/* FRONT or REAR? */
-							Camera.CameraInfo cInfo = new Camera.CameraInfo();
-							Camera.getCameraInfo(i, cInfo);
-							if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-								dict.put("orientation", "front");
-							} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-								dict.put("orientation", "rear");
-							}
-							dict.put(
-									"megapixel",
-									((double) size.width * (double) size.height) / 1000000.0f);
-							dict.put("pixelResolution", size.width + "×"
-									+ size.height);
-							dict.put("flashAvailable",
-									(flashMode != null) ? true : false);
-							listOfCameras.add(dict);
-							cam.release();
-						}
-					} else {
+					if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+						Log.d(LCAT, "we choose node for moderne cameras");
 						try {
 							Context context = TiApplication.getInstance()
 									.getApplicationContext();
@@ -160,6 +129,39 @@ public class CameraparametersModule extends KrollModule {
 							if (errorCallback != null)
 								errorCallback
 										.call(getKrollObject(), resultDict);
+						}
+					} else {
+						Log.d(LCAT, "we choose node for old cameras (else)");
+						int countOfCams = android.hardware.Camera
+								.getNumberOfCameras();
+						resultDict.put("count", countOfCams);
+						resultDict.put("api", "android.hardware.Camera");
+						resultDict.put("level", Build.VERSION.SDK_INT);
+						for (int i = 0; i < countOfCams; i++) {
+							KrollDict dict = new KrollDict();
+							Camera cam = android.hardware.Camera.open(i);
+							android.hardware.Camera.Parameters parameters = cam
+									.getParameters();
+							String flashMode = parameters.getFlashMode();
+							android.hardware.Camera.Size size = parameters
+									.getPictureSize();
+							/* FRONT or REAR? */
+							Camera.CameraInfo cInfo = new Camera.CameraInfo();
+							Camera.getCameraInfo(i, cInfo);
+							if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+								dict.put("orientation", "front");
+							} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+								dict.put("orientation", "rear");
+							}
+							dict.put(
+									"megapixel",
+									((double) size.width * (double) size.height) / 1000000.0f);
+							dict.put("pixelResolution", size.width + "×"
+									+ size.height);
+							dict.put("flashAvailable",
+									(flashMode != null) ? true : false);
+							listOfCameras.add(dict);
+							cam.release();
 						}
 					}
 					resultDict.put("cameras", listOfCameras.toArray());
