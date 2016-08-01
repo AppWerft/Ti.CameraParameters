@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.1
+version: 1.0.2
 apiversion: 2
 architectures: armeabi armeabi-v7a x86
 description: Titanium module for getting infos of all system cameras
@@ -11,8 +11,8 @@ license: Specify your license
 copyright: Copyright (c) 2016 by 
 
 # these should not be edited
-name: cameraparameters
+name: Cameraparameters
 moduleid: de.appwerft.cameraparameters
 guid: 82f61e16-f263-4bb5-90a9-f54831aa7cca
 platform: android
-minsdk: 5.2.0.PERM
+minsdk: 4.0.0.

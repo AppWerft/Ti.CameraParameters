@@ -1,8 +1,8 @@
 /* C++ code produced by gperf version 3.0.3 */
-/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -E -t /private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/cameraparameters-generated/KrollGeneratedBindings.gperf  */
+/* Command-line: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/gperf -L C++ -E -t /private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/Cameraparameters-generated/KrollGeneratedBindings.gperf  */
 /* Computed positions: -k'' */
 
-#line 3 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/cameraparameters-generated/KrollGeneratedBindings.gperf"
+#line 3 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/Cameraparameters-generated/KrollGeneratedBindings.gperf"
 
 
 #include <string.h>
@@ -12,7 +12,7 @@
 #include "de.appwerft.cameraparameters.CameraparametersModule.h"
 
 
-#line 13 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/cameraparameters-generated/KrollGeneratedBindings.gperf"
+#line 13 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/Cameraparameters-generated/KrollGeneratedBindings.gperf"
 struct titanium::bindings::BindEntry;
 /* maximum key range = 1, duplicates = 0 */
 
@@ -51,7 +51,7 @@ CameraparametersBindings::lookupGeneratedInit (register const char *str, registe
       {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
       {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
       {""}, {""}, {""}, {""}, {""}, {""},
-#line 15 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/cameraparameters-generated/KrollGeneratedBindings.gperf"
+#line 15 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/Cameraparameters-generated/KrollGeneratedBindings.gperf"
       {"de.appwerft.cameraparameters.CameraparametersModule", ::de::appwerft::cameraparameters::CameraparametersModule::bindProxy, ::de::appwerft::cameraparameters::CameraparametersModule::dispose}
     };
 
@@ -69,5 +69,5 @@ CameraparametersBindings::lookupGeneratedInit (register const char *str, registe
     }
   return 0;
 }
-#line 16 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/cameraparameters-generated/KrollGeneratedBindings.gperf"
+#line 16 "/private/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T/fuerst/Cameraparameters-generated/KrollGeneratedBindings.gperf"
 

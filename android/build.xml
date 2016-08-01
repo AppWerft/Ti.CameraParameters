@@ -1,4 +1,4 @@
-<project name="cameraparameters" default="dist">
+<project name="Cameraparameters" default="dist">
 	<description>
 		Ant build script for Titanium Android module ticameraparameters
 	</description>

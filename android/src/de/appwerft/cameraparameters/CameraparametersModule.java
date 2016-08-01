@@ -79,11 +79,14 @@ public class CameraparametersModule extends KrollModule {
 										.call(getKrollObject(), resultDict);
 						}
 					}
+					Log.d(LCAT, "Build.VERSION.SDK_INT="
+							+ Build.VERSION.SDK_INT);
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 						int countOfCams = android.hardware.Camera
 								.getNumberOfCameras();
 						resultDict.put("count", countOfCams);
 						resultDict.put("api", "android.hardware.Camera");
+						resultDict.put("level", Build.VERSION.SDK_INT);
 						for (int i = 0; i < countOfCams; i++) {
 							KrollDict dict = new KrollDict();
 							Camera cam = android.hardware.Camera.open(i);
@@ -100,11 +103,11 @@ public class CameraparametersModule extends KrollModule {
 							} else if (cInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
 								dict.put("orientation", "rear");
 							}
-							dict.put("pixelResolution", size.width + "×"
-									+ size.height);
 							dict.put(
 									"megapixel",
 									((double) size.width * (double) size.height) / 1000000.0f);
+							dict.put("pixelResolution", size.width + "×"
+									+ size.height);
 							dict.put("flashAvailable",
 									(flashMode != null) ? true : false);
 							listOfCameras.add(dict);
@@ -119,6 +122,7 @@ public class CameraparametersModule extends KrollModule {
 							resultDict.put("count",
 									cameraManager.getCameraIdList().length);
 							resultDict.put("api", "android.hardware.camera2");
+							resultDict.put("level", Build.VERSION.SDK_INT);
 							for (String id : cameraManager.getCameraIdList()) {
 								KrollDict dict = new KrollDict();
 								CameraCharacteristics character = cameraManager

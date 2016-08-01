@@ -1,4 +1,4 @@
-/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T//fuerst/cameraparameters-generated/obj/local/armeabi/objs/de.appwerft.cameraparameters/de.appwerft.cameraparameters.CameraparametersModule.o: \
+/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T//fuerst/Cameraparameters-generated/obj/local/armeabi/objs/de.appwerft.cameraparameters/de.appwerft.cameraparameters.CameraparametersModule.o: \
  jni/de.appwerft.cameraparameters.CameraparametersModule.cpp \
  jni/de.appwerft.cameraparameters.CameraparametersModule.h \
  /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/Proxy.h \

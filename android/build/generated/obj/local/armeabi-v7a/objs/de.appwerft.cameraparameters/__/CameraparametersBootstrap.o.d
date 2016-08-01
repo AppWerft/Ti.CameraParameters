@@ -1,4 +1,4 @@
-/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T//fuerst/cameraparameters-generated/obj/local/armeabi-v7a/objs/de.appwerft.cameraparameters/__/CameraparametersBootstrap.o: \
+/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T//fuerst/Cameraparameters-generated/obj/local/armeabi-v7a/objs/de.appwerft.cameraparameters/__/CameraparametersBootstrap.o: \
  jni/../CameraparametersBootstrap.cpp \
  /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/v8.h \
  /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/v8stdint.h \
