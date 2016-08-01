@@ -30,7 +30,6 @@ public:
 
 private:
 	// Methods -----------------------------------------------------------
-	static v8::Handle<v8::Value> getAllCams(const v8::Arguments&);
 	static v8::Handle<v8::Value> getAllCameras(const v8::Arguments&);
 
 	// Dynamic property accessors ----------------------------------------
