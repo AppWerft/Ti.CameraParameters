@@ -162,6 +162,10 @@ public class CameraparametersModule extends KrollModule {
 					long currentTime = System.currentTimeMillis();
 					long runtime = currentTime - startTime;
 					resultDict.put("runtime", runtime);
+					resultDict.put("model", Build.MODEL);
+					resultDict.put("manufacturer", Build.MANUFACTURER);
+					resultDict.put("hardware", Build.HARDWARE);
+					resultDict.put("device", Build.DEVICE);
 					if (successCallback != null)
 						successCallback.call(getKrollObject(), resultDict);
 					return null;

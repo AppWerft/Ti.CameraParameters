@@ -13,6 +13,6 @@ copyright: Copyright (c) 2016 by
 # these should not be edited
 name: Cameraparameters
 moduleid: de.appwerft.cameraparameters
-guid: 82f61e16-f263-4bb5-90a9-f54831aa7cca
+guid: 82f61e16-f263-4bb5-90a9-f54831aa7ccb
 platform: android
 minsdk: 4.0.0
