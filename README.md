@@ -50,6 +50,7 @@ In result payload you can get:
 
 
 Here  example outputs:
+```javascript
  {
     "model":"SM-T230",
     "hardware":"pxa1088",
