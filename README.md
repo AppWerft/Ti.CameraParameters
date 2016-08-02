@@ -164,6 +164,42 @@ Here  example outputs:
         "megapixel":0.98304
 }]}
 
+
+{
+    "device":"OnePlus",
+    "runtime":383,
+    "api":"android.hardware.Camera",
+    "count":2,
+    "manufacturer":"OnePlus",
+    "hardware":"qcom",
+    "level":22,
+    "model":"ONE E1003",
+    "cameras":[{
+        "pixelResolution":"4160×3120",
+        "size":{
+            "height":3120,
+            "width":4160
+        },
+        "flashAvailable":true,
+        "orientation":"rear",
+        "megapixel":12.9792
+    },{
+        "pixelResolution":"3264×2448",
+        "size":{
+            "height":2448,
+            "width":3264
+        },
+        "flashAvailable":false,
+        "orientation":"front",
+        "megapixel":7.990272
+}]}
+
+{
+    "model":"GT-I9300",
+    "hardware":"smdk4x12",
+    "level":18,"count":2,
+    "manufacturer":"samsung",
+    "device":"m0","runtime":1354,"api":"android.hardware.Camera","cameras":[{"orientation":"rear","pixelResolution":"3264×2448","flashAvailable":true,"megapixel":7.990272,"size":{"height":2448,"width":3264}},{"orientation":"front","pixelResolution":"1392×1392","flashAvailable":false,"megapixel":1.937664,"size":{"height":1392,"width":1392}}]}
 ```
 
 Note: `chipSize` is only available on the `Camera2` API. Therefore it is only available in API 21 (Lollipop) and later.
