@@ -48,31 +48,8 @@ In result payload you can get:
 2. used API
 3. Array with camera detail infos.
 
-Here an example output :
 
-```javascript
-{
-    "runtime":2,
-    "count":2,
-    "cameras":[{
-        "chipSize":"4.6032×3.5168",
-        "pixelResolution":"3280×2464",
-        "flashAvailable":true,
-        "orientation":"rear",
-        "megapixel":8.08192
-    },{
-        "chipSize":"2.4624×1.8544",
-        "pixelResolution":"1288×968",
-        "flashAvailable":false,
-        "orientation":"front",
-        "megapixel":1.246784
-    }],
-    "api":"android.hardware.camera2"
-}
-```
-
-Other examples:
-```javascript
+Here  example outputs:
  {
     "model":"SM-T230",
     "hardware":"pxa1088",
