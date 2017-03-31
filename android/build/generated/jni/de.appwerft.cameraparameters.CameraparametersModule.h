@@ -30,6 +30,8 @@ public:
 
 private:
 	// Methods -----------------------------------------------------------
+	static v8::Handle<v8::Value> isPermissionGranted(const v8::Arguments&);
+	static v8::Handle<v8::Value> requestPermission(const v8::Arguments&);
 	static v8::Handle<v8::Value> getAllCameras(const v8::Arguments&);
 
 	// Dynamic property accessors ----------------------------------------

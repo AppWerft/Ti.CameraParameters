@@ -89,6 +89,8 @@ Handle<FunctionTemplate> CameraparametersModule::getProxyTemplate()
 	titanium::ProxyFactory::registerProxyPair(javaClass, *proxyTemplate);
 
 	// Method bindings --------------------------------------------------------
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "isPermissionGranted", CameraparametersModule::isPermissionGranted);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "requestPermission", CameraparametersModule::requestPermission);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "getAllCameras", CameraparametersModule::getAllCameras);
 
 	Local<ObjectTemplate> prototypeTemplate = proxyTemplate->PrototypeTemplate();
@@ -108,6 +110,121 @@ Handle<FunctionTemplate> CameraparametersModule::getProxyTemplate()
 }
 
 // Methods --------------------------------------------------------------------
+Handle<Value> CameraparametersModule::isPermissionGranted(const Arguments& args)
+{
+	LOGD(TAG, "isPermissionGranted()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(CameraparametersModule::javaClass, "isPermissionGranted", "()Z");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'isPermissionGranted' with signature '()Z'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	jvalue* jArguments = 0;
+
+	jobject javaProxy = proxy->getJavaObject();
+	jboolean jResult = (jboolean)env->CallBooleanMethodA(javaProxy, methodID, jArguments);
+
+
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+	if (env->ExceptionCheck()) {
+		Handle<Value> jsException = titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+		return jsException;
+	}
+
+
+	Handle<Boolean> v8Result = titanium::TypeConverter::javaBooleanToJsBoolean(env, jResult);
+
+
+
+	return v8Result;
+
+}
+Handle<Value> CameraparametersModule::requestPermission(const Arguments& args)
+{
+	LOGD(TAG, "requestPermission()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(CameraparametersModule::javaClass, "requestPermission", "(Lorg/appcelerator/kroll/KrollDict;)V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'requestPermission' with signature '(Lorg/appcelerator/kroll/KrollDict;)V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	if (args.Length() < 1) {
+		char errorStringBuffer[100];
+		sprintf(errorStringBuffer, "requestPermission: Invalid number of arguments. Expected 1 but got %d", args.Length());
+		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
+	}
+
+	jvalue jArguments[1];
+
+
+
+
+	bool isNew_0;
+	
+	if (!args[0]->IsNull()) {
+		Local<Value> arg_0 = args[0];
+		jArguments[0].l =
+			titanium::TypeConverter::jsObjectToJavaKrollDict(env, arg_0, &isNew_0);
+	} else {
+		jArguments[0].l = NULL;
+	}
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+			if (isNew_0) {
+				env->DeleteLocalRef(jArguments[0].l);
+			}
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
 Handle<Value> CameraparametersModule::getAllCameras(const Arguments& args)
 {
 	LOGD(TAG, "getAllCameras()");
@@ -129,11 +246,6 @@ Handle<Value> CameraparametersModule::getAllCameras(const Arguments& args)
 
 	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
 
-	if (args.Length() < 1) {
-		char errorStringBuffer[100];
-		sprintf(errorStringBuffer, "getAllCameras: Invalid number of arguments. Expected 1 but got %d", args.Length());
-		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
-	}
 
 	jvalue jArguments[1];
 
@@ -141,6 +253,10 @@ Handle<Value> CameraparametersModule::getAllCameras(const Arguments& args)
 
 
 	bool isNew_0;
+	if (args.Length() <= 0) {
+		jArguments[0].l = NULL;
+
+	} else {
 	
 	if (!args[0]->IsNull()) {
 		Local<Value> arg_0 = args[0];
@@ -148,6 +264,7 @@ Handle<Value> CameraparametersModule::getAllCameras(const Arguments& args)
 			titanium::TypeConverter::jsObjectToJavaKrollDict(env, arg_0, &isNew_0);
 	} else {
 		jArguments[0].l = NULL;
+	}
 	}
 
 	jobject javaProxy = proxy->getJavaObject();

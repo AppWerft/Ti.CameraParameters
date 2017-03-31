@@ -1,0 +1,2 @@
+"/Users/fuerst/Documents/APPC_WORKSPACE/Ti.CameraParameters/android/build/generated/java/de/appwerft/cameraparameters/CameraparametersBootstrap.java"
+"/Users/fuerst/Documents/APPC_WORKSPACE/Ti.CameraParameters/android/src/de/appwerft/cameraparameters/CameraparametersModule.java"

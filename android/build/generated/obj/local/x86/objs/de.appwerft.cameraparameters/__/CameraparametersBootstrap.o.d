@@ -1,12 +1,12 @@
-/var/folders/25/yvdn9h053sv3htdkzq8558k40000gn/T//fuerst/Cameraparameters-generated/obj/local/x86/objs/de.appwerft.cameraparameters/__/CameraparametersBootstrap.o: \
+/var/folders/dp/_57t8_6j247dh0h7mknf97600000gn/T//fuerst/Cameraparameters-generated/obj/local/x86/objs/de.appwerft.cameraparameters/__/CameraparametersBootstrap.o: \
  jni/../CameraparametersBootstrap.cpp \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/v8.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/v8stdint.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8stdint.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stddef.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdio.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/AndroidUtil.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/AndroidUtil.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdlib.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/KrollBindings.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/KrollBindings.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/map \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_prolog.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/debug/_debug.h \
@@ -98,28 +98,28 @@
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_vector.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_vector.c \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_bvector.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/V8Util.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/V8Util.h \
  jni/../BootstrapJS.cpp jni/../KrollGeneratedBindings.cpp \
  jni/de.appwerft.cameraparameters.CameraparametersModule.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/Proxy.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/JavaObject.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/Proxy.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/JavaObject.h \
  /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/assert.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/EventEmitter.h \
- /Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/NativeObject.h
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/EventEmitter.h \
+ /Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/NativeObject.h
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/v8.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/v8stdint.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/v8stdint.h:
 
 /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stddef.h:
 
 /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdio.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/AndroidUtil.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/AndroidUtil.h:
 
 /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stdlib.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/KrollBindings.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/KrollBindings.h:
 
 /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/map:
 
@@ -303,7 +303,7 @@
 
 /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/stl/_bvector.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/V8Util.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/V8Util.h:
 
 jni/../BootstrapJS.cpp:
 
@@ -311,12 +311,12 @@ jni/../KrollGeneratedBindings.cpp:
 
 jni/de.appwerft.cameraparameters.CameraparametersModule.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/Proxy.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/Proxy.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/JavaObject.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/JavaObject.h:
 
 /Users/fuerst/Library/android-ndk-macosx/sources/cxx-stl/stlport/stlport/assert.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/EventEmitter.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/EventEmitter.h:
 
-/Library/Application\ Support/Titanium/mobilesdk/osx/5.2.0.GENPERM/android/native/include/NativeObject.h:
+/Library/Application\ Support/Titanium/mobilesdk/osx/5.5.1.GA/android/native/include/NativeObject.h:

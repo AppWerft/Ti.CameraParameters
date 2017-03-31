@@ -1,6 +1,5 @@
 package de.appwerft.cameraparameters;
 
-import java.util.ArrayList;
 import java.util.Timer;
 
 import org.appcelerator.kroll.KrollDict;
@@ -15,17 +14,45 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
-@SuppressWarnings("deprecation")
 @Kroll.module(name = "Cameraparameters", id = "de.appwerft.cameraparameters")
 public class CameraparametersModule extends KrollModule {
-	private static final String LCAT = "CAMINFO";
+	private final class CameraRequestHandler extends
+			AsyncTask<Void, Void, KrollDict> {
+		@Override
+		protected KrollDict doInBackground(Void[] dummy) {
+			Object[] listOfCameras = TiCameraParameters.askCameraGeneric();
+			if (listOfCameras != null)
+				resultDict.put("cameras", listOfCameras);
+			return resultDict;
+		}
+
+		protected void onPostExecute(KrollDict resultDict) {
+			long currentTime = System.currentTimeMillis();
+			long runtime = currentTime - startTime;
+			resultDict.put("runtime", runtime);
+			resultDict.put("model", Build.MODEL);
+			resultDict.put("version", Build.VERSION.SDK_INT);
+			resultDict.put("versionRelease", Build.VERSION.RELEASE);
+			resultDict.put("manufacturer", Build.MANUFACTURER);
+			resultDict.put("hardware", Build.HARDWARE);
+			resultDict.put("device", Build.DEVICE);
+			if (successCallback != null)
+				successCallback.call(getKrollObject(), resultDict);
+			TiApplication.getInstance().getApplicationContext()
+					.getApplicationInfo().toString();
+		}
+	}
+
+	public static final String LCAT = "CAMINFO 📷 📷";
 	KrollFunction successCallback = null;
 	KrollFunction errorCallback = null;
 	long startTime = 0;
 	static Timer mTimer = new Timer();
 	KrollDict resultDict;
-	ArrayList<KrollDict> listOfCameras;
+	KrollFunction onGranted, onRevoked;
 
 	public CameraparametersModule() {
 		super();
@@ -37,126 +64,69 @@ public class CameraparametersModule extends KrollModule {
 				"inside onAppCreate, if you see this, then the module is successful embedded");
 	}
 
-	private android.hardware.Camera.Size getBestSize(
-			android.hardware.Camera.Parameters parameters) {
-		android.hardware.Camera.Size result = null;
-		for (android.hardware.Camera.Size size : parameters
-				.getSupportedPictureSizes()) {
-			Log.d(LCAT, "SIZE=" + size.width + "x" + size.height);
-			// if (size.width <= width && size.height <= height) {
-			if (result == null) {
-				result = size;
-			} else {
-				int resultArea = result.width * result.height;
-				int newArea = size.width * size.height;
-				if (newArea > resultArea) {
-					result = size;
-				}
-			}
-			// }
-		}
-		return (result);
-	}
-
-	private ArrayList<KrollDict> getAllSizes(
-			android.hardware.Camera.Parameters parameters) {
-		ArrayList<KrollDict> list = new ArrayList<KrollDict>();
-		for (android.hardware.Camera.Size size : parameters
-				.getSupportedPictureSizes()) {
-			KrollDict dict = new KrollDict();
-			dict.put("width", size.width);
-			dict.put("height", size.height);
-			list.add(dict);
-		}
-		return (list);
-	}
-
-	private void askLegacyCamera() {
-		Log.d(LCAT, "we choose node for old cameras Kitkat and older");
-		int countOfCams = android.hardware.Camera.getNumberOfCameras();
-		Log.d(LCAT, "we  have number of cams " + countOfCams);
-
-		resultDict.put("count", countOfCams);
-		resultDict.put("api", "android.hardware.Camera");
-		resultDict.put("level", Build.VERSION.SDK_INT);
-		for (int i = 0; i < countOfCams; i++) {
-			KrollDict dict = new KrollDict();
-			android.hardware.Camera cam = android.hardware.Camera.open(i);
-			android.hardware.Camera.Parameters parameters = cam.getParameters();
-			String flashMode = parameters.getFlashMode();
-			/* best resolution: */
-			android.hardware.Camera.Size size = getBestSize(parameters);
-			/* all available */
-			dict.put("sizes", getAllSizes(parameters).toArray());
-			KrollDict sizeDict = new KrollDict();
-			sizeDict.put("width", size.width);
-			sizeDict.put("height", size.height);
-			dict.put("maxSize", sizeDict);
-			/* FRONT or REAR? */
-			android.hardware.Camera.CameraInfo cInfo = new android.hardware.Camera.CameraInfo();
-			android.hardware.Camera.getCameraInfo(i, cInfo);
-			if (cInfo.facing == android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT) {
-				dict.put("orientation", "front");
-			} else if (cInfo.facing == android.hardware.Camera.CameraInfo.CAMERA_FACING_BACK) {
-				dict.put("orientation", "rear");
-			}
-			dict.put("maxMegapixel",
-					((double) size.width * (double) size.height) / 1000000.0f);
-			dict.put("maxPixelResolution", size.width + "×" + size.height);
-			dict.put("flashAvailable", (flashMode != null) ? true : false);
-			listOfCameras.add(dict);
-			cam.release();
-		}
-	}
-
-	/*
-	 * @TargetApi(Build.VERSION_CODES.LOLLIPOP) private void askLollipopCamera()
-	 * { Log.d(LCAT, "we choose node for moderne cameras Lollipop and newer");
-	 * try { Context context = TiApplication.getInstance()
-	 * .getApplicationContext(); android.hardware.camera2.CameraManager
-	 * cameraManager = (android.hardware.camera2.CameraManager) context
-	 * .getSystemService(Context.CAMERA_SERVICE); resultDict.put("count",
-	 * cameraManager.getCameraIdList().length); resultDict.put("api",
-	 * "android.hardware.camera2"); resultDict.put("level",
-	 * Build.VERSION.SDK_INT); for (String id : cameraManager.getCameraIdList())
-	 * { KrollDict dict = new KrollDict();
-	 * android.hardware.camera2.CameraCharacteristics character = cameraManager
-	 * .getCameraCharacteristics(id);
-	 * 
-	 * Boolean flashAvailable = character
-	 * .get(android.hardware.camera2.CameraCharacteristics
-	 * .FLASH_INFO_AVAILABLE);
-	 * 
-	 * SizeF physicalsize = character
-	 * .get(android.hardware.camera2.CameraCharacteristics
-	 * .SENSOR_INFO_PHYSICAL_SIZE);
-	 * 
-	 * Rect activeArray = character
-	 * .get(android.hardware.camera2.CameraCharacteristics
-	 * .SENSOR_INFO_ACTIVE_ARRAY_SIZE);
-	 * 
-	 * int cOrientation = character
-	 * .get(android.hardware.camera2.CameraCharacteristics.LENS_FACING);
-	 * dict.put( "orientation", (cOrientation ==
-	 * android.hardware.camera2.CameraCharacteristics.LENS_FACING_FRONT) ?
-	 * "front" : "rear"); dict.put("flashAvailable", flashAvailable);
-	 * dict.put("pixelResolution", activeArray.width() + "×" +
-	 * activeArray.height()); dict.put("megapixel", ((double)
-	 * activeArray.width() * (double) activeArray .height()) / 1000000.0f);
-	 * dict.put("chipSize", physicalsize.getWidth() + "×" +
-	 * physicalsize.getHeight()); listOfCameras.add(dict); } } catch
-	 * (android.hardware.camera2.CameraAccessException e) { Log.e(LCAT,
-	 * "Failed to interact with camera.", e); resultDict.put("error",
-	 * "Failed to interact with camera."); if (errorCallback != null)
-	 * errorCallback.call(getKrollObject(), resultDict); }
-	 * 
-	 * }
-	 */
 	@Kroll.method
-	public void getAllCameras(KrollDict opts) {
-		Log.d(LCAT, "starting of getAllCameras");
+	public boolean isPermissionGranted() {
+		if (Build.VERSION.SDK_INT >= 23) {
+			Activity thisActivity = TiApplication.getInstance()
+					.getCurrentActivity();
+			if (ContextCompat.checkSelfPermission(thisActivity,
+					android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+				Log.v(LCAT, "Permission is granted");
+				return true;
+			} else {
+				Log.v(LCAT, "Permission is revoked");
+				return false;
+			}
+		} else { // permission is automatically granted on sdk<23 upon
+					// installation
+			Log.v(LCAT, "Permission is granted");
+			return true;
+		}
+	}
+
+	@Kroll.method
+	public void requestPermission(KrollDict args) {
+		if (args.containsKeyAndNotNull("onGranted")) {
+			Object cb = args.get("onGranted");
+			if (cb instanceof KrollFunction) {
+				onGranted = (KrollFunction) cb;
+			}
+		}
+		if (args.containsKeyAndNotNull("onRevoked")) {
+			Object cb = args.get("onRevoked");
+			if (cb instanceof KrollFunction) {
+				onRevoked = (KrollFunction) cb;
+			}
+		}
+		if (Build.VERSION.SDK_INT >= 23) {
+			Activity thisActivity = TiApplication.getInstance()
+					.getCurrentActivity();
+			if (ContextCompat.checkSelfPermission(thisActivity,
+					android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+				Log.v(LCAT, "Permission is granted");
+				if (onGranted != null)
+					onGranted.call(getKrollObject(), new KrollDict());
+			} else {
+				Log.v(LCAT, "Permission is revoked");
+				ActivityCompat.requestPermissions(thisActivity,
+						new String[] { Manifest.permission.CAMERA }, 1);
+
+			}
+		} else { // permission is automatically granted on sdk<23 upon
+					// installation
+			if (onGranted != null)
+				onGranted.call(getKrollObject(), new KrollDict());
+		}
+
+	}
+
+	@Kroll.method
+	public void getAllCameras(@Kroll.argument(optional = true) KrollDict opts) {
+		if (isPermissionGranted() == false) {
+			Log.e(LCAT, "no permission for camera granted");
+			return;
+		}
 		resultDict = new KrollDict();
-		listOfCameras = new ArrayList<KrollDict>();
 		startTime = System.currentTimeMillis();
 		if (opts != null && opts instanceof KrollDict) {
 			if (opts.containsKeyAndNotNull("onSuccess")) {
@@ -165,51 +135,7 @@ public class CameraparametersModule extends KrollModule {
 			if (opts.containsKeyAndNotNull("onError")) {
 				errorCallback = (KrollFunction) opts.get("onError");
 			}
-			Log.d(LCAT, "all parameters imported");
-			Log.d(LCAT, "👿😈 Build.VERSION.SDK_INT=" + Build.VERSION.SDK_INT);
-			AsyncTask<Void, Void, Void> doRequest = new AsyncTask<Void, Void, Void>() {
-				@Override
-				protected Void doInBackground(Void[] dummy) {
-					Log.d(LCAT, "async task (background) started");
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						Log.d(LCAT, " Marshmellow+  =>  need lifetime perms");
-						Activity currentActivity = TiApplication.getInstance()
-								.getRootOrCurrentActivity();
-						if (currentActivity
-								.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-							resultDict.put("error",
-									"No permission to access camera manager.");
-							if (errorCallback != null)
-								errorCallback
-										.call(getKrollObject(), resultDict);
-						}
-					} else {
-						Log.d(LCAT,
-								"no M, we don't need request of permissions");
-					}
-					Log.d(LCAT, "Build.VERSION.SDK_INT="
-							+ Build.VERSION.SDK_INT);
-					// if (android.os.Build.VERSION.SDK_INT >=
-					// Build.VERSION_CODES.LOLLIPOP) {
-					// askNewCamera();
-					// } else {
-					askLegacyCamera();
-					// }
-					resultDict.put("cameras", listOfCameras.toArray());
-					long currentTime = System.currentTimeMillis();
-					long runtime = currentTime - startTime;
-					resultDict.put("runtime", runtime);
-					resultDict.put("model", Build.MODEL);
-					resultDict.put("manufacturer", Build.MANUFACTURER);
-					resultDict.put("hardware", Build.HARDWARE);
-					resultDict.put("device", Build.DEVICE);
-					if (successCallback != null)
-						successCallback.call(getKrollObject(), resultDict);
-					return null;
-
-				}
-
-			};// async task
+			AsyncTask<Void, Void, KrollDict> doRequest = new CameraRequestHandler();
 			doRequest.execute();
 		} else
 			Log.e(LCAT,
