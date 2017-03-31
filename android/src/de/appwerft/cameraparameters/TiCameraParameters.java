@@ -10,8 +10,12 @@ import org.appcelerator.titanium.TiApplication;
 import android.content.Context;
 import android.graphics.Rect;
 import android.hardware.Camera.Size;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraCharacteristics.Key;
 import android.os.Build;
 import android.util.SizeF;
+
+import android.hardware.camera2.CameraMetadata;
 
 @SuppressWarnings("deprecation")
 public class TiCameraParameters {
@@ -81,23 +85,51 @@ public class TiCameraParameters {
 			resultDict.put("api", "android.hardware.camera2");
 			for (String id : cameraManager.getCameraIdList()) {
 				KrollDict dict = new KrollDict();
-				android.hardware.camera2.CameraCharacteristics character = cameraManager
+				CameraCharacteristics character = cameraManager
 						.getCameraCharacteristics(id);
 
+				dict.put("autofocusModes", character
+						.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES));
+				dict.put("availableEffects", character
+						.get(CameraCharacteristics.CONTROL_AVAILABLE_EFFECTS));
+				dict.put("availableModes", character
+						.get(CameraCharacteristics.CONTROL_AVAILABLE_MODES));
+				dict.put(
+						"availableSceneModes",
+						character
+								.get(CameraCharacteristics.CONTROL_AVAILABLE_SCENE_MODES));
+				dict.put(
+						"availableVideoStabilizationModes",
+						character
+								.get(CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES));
+				dict.put("availableAutoWhiteBalanceModes", character
+						.get(CameraCharacteristics.CONTROL_AWB_AVAILABLE_MODES));
+
+				dict.put("availableAutoWhiteBalanceLockModes", character
+						.get(CameraCharacteristics.CONTROL_AWB_LOCK_AVAILABLE));
+				dict.put("maxRegionsAutoExposer", character
+						.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AE));
+				dict.put("maxRegionsAutoFocus", character
+						.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AF));
+
+				dict.put("maxRegionsAutoWhiteBalance", character
+						.get(CameraCharacteristics.CONTROL_MAX_REGIONS_AWB));
+				dict.put(
+						"minFocusDistance",
+						character
+								.get(CameraCharacteristics.LENS_INFO_MINIMUM_FOCUS_DISTANCE));
+
 				Boolean flashAvailable = character
-						.get(android.hardware.camera2.CameraCharacteristics.FLASH_INFO_AVAILABLE);
-
+						.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
 				SizeF physicalsize = character
-						.get(android.hardware.camera2.CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE);
-
+						.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE);
 				Rect activeArray = character
-						.get(android.hardware.camera2.CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
-
+						.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE);
 				int cOrientation = character
-						.get(android.hardware.camera2.CameraCharacteristics.LENS_FACING);
+						.get(CameraCharacteristics.LENS_FACING);
 				dict.put(
 						"orientation",
-						(cOrientation == android.hardware.camera2.CameraCharacteristics.LENS_FACING_FRONT) ? "front"
+						(cOrientation == CameraCharacteristics.LENS_FACING_FRONT) ? "front"
 								: "rear");
 				dict.put("flashAvailable", flashAvailable);
 				dict.put("pixelResolution", activeArray.width() + "×"
